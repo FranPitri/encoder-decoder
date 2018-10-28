@@ -51,3 +51,6 @@ else
     valgrind ./app -d -l "$dictionary" -i "$input_file" -o "$output_file" 2>> output/performance-information.md 
     echo "\`\`\`\n" >> output/performance-information.md
 fi
+
+pandoc -f markdown output/performance-information.md > output/performance-information.html
+rm output/performance-information.md
