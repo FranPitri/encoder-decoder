@@ -35,19 +35,19 @@ if ["$mode" == "encode"]; then
     echo "\`\`\`" >> output/performance-information.md
     (/usr/bin/time -f "Execution time: %E" ./app \
         -c -l "$dictionary" -i "$input_file" -o "$output_file") 2>> output/performance-information.md
-    echo "\`\`\`" >> output/performance-information.md
+    echo "\`\`\`\n" >> output/performance-information.md
     echo "##MEMORY FOOTPRINT (Encoding)" >> output/performance-information.md
     echo "\`\`\`" >> output/performance-information.md
     valgrind ./app -c -l "$dictionary" -i "$input_file" -o "$output_file" 2>> output/performance-information.md
-    echo "\`\`\`" >> output/performance-information.md
+    echo "\`\`\`\n" >> output/performance-information.md
 else  
     echo "##RUN TIME (Decoding)" >> output/performance-information.md
     echo "\`\`\`" >> output/performance-information.md
     (/usr/bin/time -f "Execution time: %E" ./app \
         -d -l "$dictionary" -i "$input_file" -o "$output_file") 2> output/execution-time.txt
-    echo "\`\`\`" >> output/performance-information.md
+    echo "\`\`\`\n" >> output/performance-information.md
     echo "##MEMORY FOOTPRINT (Encoding)" >> output/performance-information.md
     echo "\`\`\`" >> output/performance-information.md
     valgrind ./app -d -l "$dictionary" -i "$input_file" -o "$output_file" 2>> output/performance-information.md 
-    echo "\`\`\`" >> output/performance-information.md
+    echo "\`\`\`\n" >> output/performance-information.md
 fi
