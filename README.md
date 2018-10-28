@@ -17,4 +17,4 @@ docker build -t encoder-decoder .
 docker run --rm -v $(pwd):/app/output encoder-decoder 
 ```
 
-This will run the script and leave behind an md file with some performance information in the directory you ran it.
+This will run the script and leave behind an html file with some performance information in the directory you ran it.
