@@ -46,7 +46,7 @@ else
     (/usr/bin/time -f "Execution time: %E" ./app \
         -d -l "$dictionary" -i "$input_file" -o "$output_file") 2> output/execution-time.txt
     echo "\`\`\`\n" >> output/performance-information.md
-    echo "##MEMORY FOOTPRINT (Encoding)" >> output/performance-information.md
+    echo "##MEMORY FOOTPRINT (Decoding)" >> output/performance-information.md
     echo "\`\`\`" >> output/performance-information.md
     valgrind ./app -d -l "$dictionary" -i "$input_file" -o "$output_file" 2>> output/performance-information.md 
     echo "\`\`\`\n" >> output/performance-information.md
