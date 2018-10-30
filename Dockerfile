@@ -4,10 +4,14 @@ RUN mkdir /app
 COPY . /app
 WORKDIR /app
 
-RUN apt-get update
-RUN apt-get install -y valgrind
-RUN apt-get install -y time 
-RUN apt-get install -y pandoc
+RUN set -ex; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
+        valgrind \
+        time \
+        pandoc \
+    ; \
+    rm -rf /var/lib/apt/lists/*;
 
 RUN g++ -std=c++17 main.cpp -o app
 
