@@ -1,7 +1,6 @@
 unsigned int convert(unsigned char);
 
 unsigned int convert(unsigned char letter){
-    char none = '\0';
 
     if(letter >= 'A' && letter <= 'Z'){
         letter+=32-97;

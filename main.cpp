@@ -3,68 +3,63 @@
 #include <sstream>
 #include <string>
 #include "Trie/TrieNode.h"
-
+#include "Utils/characterRange.h"
+#include "Utils/cmd.h"
 
 int main(int argc, char* argv[]){
 
 	TrieNode* head = new TrieNode();
 
-    std::cout << "Working with file.." << '\n';
+    std::string INPUT_FILE = getCmdOption(argc, argv, "-i=");
+    std::string OUTPUT_FILE = getCmdOption(argc, argv, "-o=");
+    std::string DICTIONARY_FILE = getCmdOption(argc, argv, "-l=");
+    
+    // Dictionary input stream
+    std::ifstream dictionary_infile(DICTIONARY_FILE);
 
-    std::ifstream infile("isotest.txt");
-
-    std::string line;
-    while (std::getline(infile, line)) {
-        std::istringstream iss(line);
-        std::string key, mirror;
-        if (!(iss >> key >> mirror)) { break; } // error
-        head->insert(key, mirror);
+    if (getCmdFlag(argc, argv, "-c")) {
+        // Read dictionary (Encode mode)
+        std::string dictionary_line;
+        while (std::getline(dictionary_infile, dictionary_line)) {
+            std::istringstream iss(dictionary_line);
+            std::string key, mirror;
+            if (!(iss >> key >> mirror)) { break; } // error
+            head->insert(key, mirror);
+        }
+    } else {
+        // Read dictionary (Decode mode)
+        std::string dictionary_line;
+        while (std::getline(dictionary_infile, dictionary_line)) {
+            std::istringstream iss(dictionary_line);
+            std::string key, mirror;
+            if (!(iss >> key >> mirror)) { break; } // error
+            head->insert(mirror, key);
+        }
     }
-  
-    std::cout << "Finished working with file.." << '\n';
-    
 
-    std::cout << "Started encoding.." << '\n';
-    
-    std::ifstream phrase_infile("books/iso-game-of-thrones.txt");
+    // File to-be-decoded input stream 
+    std::ifstream input_infile(INPUT_FILE);
 
-    std::string phrase_line;
-    std::string result;
-    while (std::getline(phrase_infile, phrase_line)) {
-        
+    // File to-be-decoded output stream 
+    std::ofstream outfile(OUTPUT_FILE);
+
+    // Read file to be decoded & decode
+    std::string in_line;
+    while (std::getline(input_infile, in_line)) {
         std::string word;
-        for (unsigned char letter : phrase_line) {
-            if (letter != ' ') {
-                word += convert(letter);
+        for (unsigned char letter : in_line) {
+            if (!characterNotSupported(letter)) {
+                word += letter;
             } else {
-                try {
-                    //for (auto &letter : word)
-                    //    std::tolower(letter);
-                    result += head->search(word) + ' ';
-                    //std::cout<<word << '\n';
-                } catch (...) {
-                    result += word + ' ';
-                }
-                word = "";
+                outfile << head->search(word) << letter;
+                word.clear();
             }
         }
-        try {
-            //for (auto &letter : word)
-            //    std::tolower(letter);
-            //result += head->search(word) + ' ';
-        } catch (...) {
-            result += word + ' ';
-        }
-        
+        outfile << head->search(word) << '\n';
+        word.clear();
     }
 
-    std::ofstream outfile("out.txt");
-
-    outfile << result;
-
     outfile.close();
-
-    std::cout << "Finished encoding.." << '\n';
     
 	return 0;
 }

@@ -4,7 +4,7 @@
 
 #ifndef TRIENODE_H
 #define TRIENODE_H
-//#define int ALPHABET_EXTENDED = 33;
+#define ALPHABET_EXTENDED 34
 
 #include <string>
 
@@ -17,7 +17,7 @@ class TrieNode {
         
         TrieNode() {
             this->isLeaf = false;
-			children = new HashMap<unsigned char, TrieNode*>(34, convert);
+			children = new HashMap<unsigned char, TrieNode*>(ALPHABET_EXTENDED, convert);
         }
 
         void insert(std::string, std::string);
@@ -28,15 +28,13 @@ class TrieNode {
 void TrieNode::insert(std::string key, std::string mirror) {
 	// start from root node
 	TrieNode* current = this;
-	for (int i = 0; i < key.length(); i++) {
-		unsigned char unsigned_k = key[i];
-		char k = key[i];
+	for (auto i = key.begin(), end = key.end(); i != end; i++) {
 		// create a new node if path doesn't exist
-		if (current->children->get((unsigned char)key[i]) == nullptr)
-			current->children->put((unsigned char)key[i], new TrieNode());
+		if (current->children->get((unsigned char)(*i)) == nullptr)
+			current->children->put((unsigned char)(*i), new TrieNode());
 
 		// go to next node
-		current = current->children->get((unsigned char)key[i]);
+		current = current->children->get((unsigned char)(*i));
 	}
 
 	// mark current node as leaf
@@ -47,26 +45,24 @@ void TrieNode::insert(std::string key, std::string mirror) {
 std::string TrieNode::search(std::string key) {
 	// throw if Trie is empty
 	if (this == nullptr)
-		throw "Not found";
+		return key;
 
 	TrieNode* current = this;
-	for (int i = 0; i < key.length(); i++) {
-		unsigned char unsigned_k = key[i];
-		char k = key[i];
+	for (auto i = key.begin(), end = key.end(); i != end; i++) {
 		// go to next node
-		current = current->children->get((unsigned char)key[i]);
+		current = current->children->get((unsigned char)(*i));
 
 		// if string is invalid (reached end of path in Trie)
 		if (current == nullptr)
-			throw "Not found";
+			return key;
 	}
 
 	// if current node is a leaf and we have reached the
 	// end of the string, return mirror
 	if (current->isLeaf)
         return current->mirror;
-    else
-        throw "Not found";
+		
+	return key;
 }
 
 

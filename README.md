@@ -14,7 +14,8 @@ To run it, simply use these commands
 docker build -t encoder-decoder .
 ```
 ```bash
-docker run --rm -v $(pwd):/app/output encoder-decoder 
+docker run --rm -v {files_dir}:/app/files -v $(pwd):/app/output/ encoder-decoder \
+    [-d/-c] -i {input_filename} -o {output_filename} -l {dictionary_file}    
 ```
 
 This will run the script and leave behind an html file with some performance information in the directory you ran it.
