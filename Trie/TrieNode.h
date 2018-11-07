@@ -1,6 +1,6 @@
-#include <iostream>
 #include "../HashMap/HashMap.h"
 #include "../HashMap/hashFunction.h"
+#include "../Utils/capitalize.h"
 
 #ifndef TRIENODE_H
 #define TRIENODE_H
@@ -59,9 +59,12 @@ std::string TrieNode::search(std::string key) {
 
 	// if current node is a leaf and we have reached the
 	// end of the string, return mirror
-	if (current->isLeaf)
-        return current->mirror;
-		
+	if (current->isLeaf) {
+		std::string mirror = current->mirror;
+		if (isCaps((unsigned char const)key[0]))
+			toCaps(mirror);
+		return mirror;
+	}
 	return key;
 }
 
